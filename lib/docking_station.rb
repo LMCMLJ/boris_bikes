@@ -17,17 +17,17 @@ class DockingStation
   end
 
   def dock(bike)
-    raise "Bike station full" if full?
+    raise "Docking station full" if full?
     @bikes << bike
   end
 
   private
 
-  def full?
-    @bikes.count >= @capacity
-  end
+    def full?
+      @bikes.count >= @capacity
+    end
 
-  def empty?
-    @bikes.empty?
-  end
+    def empty?
+      @bikes.empty?
+    end
 end
