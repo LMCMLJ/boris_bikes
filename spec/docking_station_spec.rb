@@ -1,10 +1,12 @@
 require 'docking_station'
 
 describe DockingStation do
-  
+
   before :each do
     @bike_normal = double(:bike_normal)
     @bike_broken = double(:bike_broken)
+    allow(@bike_normal).to receive(:working?).and_return(true)
+    allow(@bike_broken).to receive(:working?).and_return(false)
     @station = DockingStation.new
     @station_overfull = DockingStation.new(35)
   end
