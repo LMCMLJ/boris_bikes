@@ -1,10 +1,10 @@
 require 'docking_station'
 
 describe DockingStation do
-
+  
   before :each do
-    @bike_normal = Bike.new
-    @bike_broken = Bike.new(false)
+    @bike_normal = double(:bike_normal)
+    @bike_broken = double(:bike_broken)
     @station = DockingStation.new
     @station_overfull = DockingStation.new(35)
   end
