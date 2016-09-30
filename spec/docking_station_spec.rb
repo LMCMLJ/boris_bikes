@@ -5,69 +5,66 @@ describe DockingStation do
   before :each do
     @bike_normal = Bike.new
     @bike_broken = Bike.new(false)
-
+    @station = DockingStation.new
+    @station_overfull = DockingStation.new(35)
   end
 
   it { is_expected.to respond_to :release_bike }
   it { is_expected.to respond_to(:dock).with(1).argument}
 
-  it 'releases working bikes' do
-    bike = Bike.new
-    subject.dock(bike)
-    bike = subject.release_bike
-    expect(bike).to be_working
-  end
+  context "bike intake" do
 
-  it 'docks a bike' do
-    bike = Bike.new
-    expect(subject.dock(bike)).to eq [bike]
-  end
+    describe "#dock" do
+      it "returns array when working bike entered" do
+        expect(subject.dock(@bike_normal)).to eq [@bike_normal]
+      end
+    end
 
-  it 'returns docked bike' do
-    bike = Bike.new
-    subject.dock(bike)
-    expect(subject.bikes).to eq [bike]
-  end
-
-  it 'doesn\'t release a bike when there are none' do
-    docking_station = DockingStation.new
-    if docking_station.bikes == nil
-      expect {subject.release_bike}.to raise_error("No bikes available")
+    it 'returns docked bike' do
+      @station.dock(@bike_normal)
+      expect(@station.bike_rack).to eq [@bike_normal]
     end
   end
 
-  it "doesn't accept more than capacity" do
-    bike = Bike.new
-    subject.capacity.times{subject.dock(bike)}
-    if subject.bikes.count >= subject.capacity
-      expect {subject.dock(bike)}.to raise_error("Docking station full")
+  context "bike release" do
+
+    it "releases working bikes" do
+      @station.dock(@bike_normal)
+      bike = @station.release_bike
+      expect(bike).to be_working
+    end
+
+    it "doesn't release a bike when there are none" do
+      if @station.bike_rack == nil
+        expect {@station.release_bike}.to raise_error("No bikes available")
+      end
     end
   end
 
-  it "user can set capacity" do
-    docking_station = DockingStation.new(30)
-    expect(docking_station.capacity).to eq 30
-  end
+  context "capacity" do
 
-  it "there is a default capacity" do
-    docking_station = DockingStation.new
-    expect(docking_station.capacity).to eq 20
-  end
-
-  it "separates bikes that are working or not working" do
-    subject.dock(@bike_broken)
-    expect(subject.broken_bikes).to eq [@bike_broken]
-  end
-
-end
-
-describe "initialization" do
-  subject { DockingStation.new }
-  let(:bike) { Bike.new }
-  it "there is a default capacity" do
-    DockingStation::DEFAULT_CAPACITY.times do
-      subject.dock(bike)
+    it "doesn't accept more than capacity" do
+      @station.capacity.times{@station.dock(@bike_normal)}
+      expect {@station.dock(@bike_normal)}.to raise_error("Docking station full")
     end
-    expect{ subject.dock(bike) }.to raise_error "Docking station full"
+
+    it "user can set capacity" do
+      expect(@station_overfull.capacity).to eq 35
+    end
+
+    it "there is a default capacity when none is entered at init" do
+      expect(subject.capacity).to eq 20
+    end
+  end
+
+  context "allows sorting broken and working bikes" do
+
+    it "appends broken bikes to @bike_rack_broken" do
+      subject.dock(@bike_broken)
+      expect(subject.bike_rack_broken).to eq [@bike_broken]
+    end
+
+    it "appends working bikes to @bike_rack" do
+    end
   end
 end
