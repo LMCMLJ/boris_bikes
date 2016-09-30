@@ -1,6 +1,13 @@
 require 'docking_station'
 
 describe DockingStation do
+
+  before :each do
+    @bike_normal = Bike.new
+    @bike_broken = Bike.new(false)
+
+  end
+
   it { is_expected.to respond_to :release_bike }
   it { is_expected.to respond_to(:dock).with(1).argument}
 
@@ -45,6 +52,11 @@ describe DockingStation do
   it "there is a default capacity" do
     docking_station = DockingStation.new
     expect(docking_station.capacity).to eq 20
+  end
+
+  it "separates bikes that are working or not working" do
+    subject.dock(@bike_broken)
+    expect(subject.broken_bikes).to eq [@bike_broken]
   end
 
 end
