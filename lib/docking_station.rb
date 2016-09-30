@@ -23,6 +23,19 @@ class DockingStation
     bike.working? ? @bike_rack << bike : @bike_rack_broken << bike
   end
 
+  def send_bikes
+    temp_var = @bike_rack_broken
+    @bike_rack_broken =  []
+    return temp_var
+  end
+
+  def receive_bikes(working_bikes)
+    working_bikes.each do |x|
+      @bike_rack << x
+    end
+    true
+  end
+
   private
 
     def full?
