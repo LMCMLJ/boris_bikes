@@ -5,11 +5,11 @@ class Van
     @transport_bikes = []
   end
 
-  def pickup(location)
-    @transport_bikes = location.request_bikes
+  def bikes_to_van(location)
+    @transport_bikes = location.send_bikes
   end
 
-  def dropoff(location)
-    location.provide_bikes(@transport_bikes)
+  def bikes_from_van(location)
+    location.receive_bikes(@transport_bikes)
   end
 end
