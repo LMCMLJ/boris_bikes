@@ -60,11 +60,13 @@ describe DockingStation do
   context "allows sorting broken and working bikes" do
 
     it "appends broken bikes to @bike_rack_broken" do
-      subject.dock(@bike_broken)
-      expect(subject.bike_rack_broken).to eq [@bike_broken]
+      @station.dock(@bike_broken)
+      expect(@station.bike_rack_broken).to eq [@bike_broken]
     end
 
     it "appends working bikes to @bike_rack" do
+      @station.dock(@bike_normal)
+      expect(@station.bike_rack).to eq [@bike_normal]
     end
   end
 end

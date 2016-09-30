@@ -20,7 +20,7 @@ class DockingStation
 
   def dock(bike)
     raise"Docking station full" if full?
-    @bike_rack << bike
+    bike.working? ? @bike_rack << bike : @bike_rack_broken << bike
   end
 
   private
